@@ -20,10 +20,18 @@ class ChoiceViewController: UIViewController {
     
     
     //Segue way + code
-    
+    @IBAction func playPaper(_ sender: Any) {
+        performSegue(withIdentifier: "play", sender: sender)
+    }
     
     
     //Segue way only
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "play" {
+            let vc = segue.destination as! ResultsViewController
+            vc.userChoice = getUserShape(sender as! UIButton)
+        }
+    }
 
     // The enum "Shape" represents a play or move
     private func getUserShape(_ sender: UIButton) -> Shape {
