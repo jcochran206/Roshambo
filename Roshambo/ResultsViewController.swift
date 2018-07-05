@@ -22,18 +22,53 @@ enum Shape: String {
     }
 }
 
-class ResultsViewController : UIViewController {
+class ResultsViewController: UIViewController {
+    //mark outlets
+    @IBOutlet weak var resultImage: UIImageView!
+    @IBOutlet weak var resultLabel: UILabel!
     
-    //Mark Outlets
+    // MARK: Properties
     
+    // When the ResultsViewController is initialized a userChoice is passed in and an opponent's play is generated.
+    var userChoice: Shape!
+    private let opponentChoice: Shape = Shape.randomShape()
     
+    // MARK: Life Cycle
     
-    // Mark Properties
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        //displayResult()
+    }
     
+    // MARK: UI
     
-    //Mark lifecycle
+    // The displayResult method generates the image and message for the results of a match.
+    private func displayResult() {
+        // Ideally, most of this would be handled by a model.
+        var imageName: String
+        var text: String
+        let matchup = "\(userChoice.rawValue) vs. \(opponentChoice.rawValue)"
+        
+        // Why is an exclamation point necessary? :)
+        switch (userChoice!, opponentChoice) {
+        case let (user, opponent) where user == opponent:
+            text = "\(matchup): it's a tie!"
+            imageName = "tie"
+        case (.Rock, .Scissors), (.Paper, .Rock), (.Scissors, .Paper):
+            text = "You win with \(matchup)!"
+            imageName = "\(userChoice.rawValue)-\(opponentChoice.rawValue)"
+        default:
+            text = "You lose with \(matchup) :(."
+            imageName = "\(opponentChoice.rawValue)-\(userChoice.rawValue)"
+        }
+        
+        imageName = imageName.lowercased()
+        resultImage.image = UIImage(named: imageName)
+        resultLabel.text = text
+    }
     
-    
-    //Mark UI
+    @IBAction func playAgain(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
     
 }
